@@ -1,0 +1,54 @@
+.layout {
+  height: 100vh;
+}
+
+.logo {
+  display: block;
+  width: 137px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 40px;
+  margin: 16px 24px 16px 0;
+  float: left;
+}
+
+.logo .logo-div {
+  height: 100%;
+  margin: -15px 0 0 0;
+  display: block;
+  color: aliceblue;
+}
+
+.logo img {
+  height: 100%;
+}
+
+.logo span {
+  height: 100%;
+}
+
+.sign-up-menu {
+  float: right;
+}
+
+[nz-menu] {
+  line-height: 64px;
+  min-width: 850px;
+  width: 100%;
+}
+
+nz-content {
+  padding: 0 50px;
+}
+
+nz-footer {
+  text-align: center;
+}
+
+.inner-content {
+  margin: 10px;
+  background: #fff;
+  padding: 24px;
+  min-height: 600px;
+  min-width: 850px;
+}

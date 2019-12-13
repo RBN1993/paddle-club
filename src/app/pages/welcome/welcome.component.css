@@ -1,0 +1,73 @@
+.hero-div-init {
+  margin: 10px 0 10px 0;
+  color: white;
+  background: url(/assets/images/portada.jpg) no-repeat;
+  background-size: cover;
+  border: 1px solid black;
+  border-radius: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: large;
+  color: white;
+  width: 100%;
+  display: inline-grid;
+  align-items: flex-end;
+  height: 38vh;
+}
+.hero-div-init h1 {
+  color: white;
+}
+.body-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: 'art1 art2 art3';
+  padding: 32px 15px;
+}
+
+.article-1 {
+  grid-area: art1;
+  margin: 0 10px 0 0;
+}
+.article-1 p {
+  line-height: 1.5em;
+  font-family: 'Lato';
+  font-size: 15px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 15px;
+}
+.article-2 {
+  grid-area: art2;
+  margin: 0 10px 0 0;
+}
+.article-2 p {
+  line-height: 1.5em;
+  font-family: 'Lato';
+  font-size: 15px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 15px;
+}
+.article-3 {
+  grid-area: art3;
+}
+.article-3 p {
+  line-height: 1.5em;
+  font-family: 'Lato';
+  font-size: 15px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 15px;
+}
+
+h3 {
+  line-height: 1.5em;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  background: #273b47;
+  border: 1px solid;
+  border-radius: 10px;
+  border-radius: 10px;
+}
+
