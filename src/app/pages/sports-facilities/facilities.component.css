@@ -1,0 +1,10 @@
+.map {
+  width: 100%;
+  height: 45vh;
+}
+
+.ant-card-meta {
+  width: 60%;
+  minWidth: 350px;
+  margin: 0 0 0 43%;
+}

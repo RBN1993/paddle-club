@@ -14,9 +14,11 @@
   align-items: flex-end;
   height: 38vh;
 }
+
 .hero-div-init h1 {
   color: white;
 }
+
 .body-bottom {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -28,6 +30,7 @@
   grid-area: art1;
   margin: 0 10px 0 0;
 }
+
 .article-1 p {
   line-height: 1.5em;
   font-family: 'Lato';
@@ -36,10 +39,12 @@
   background: #fff;
   padding: 15px;
 }
+
 .article-2 {
   grid-area: art2;
   margin: 0 10px 0 0;
 }
+
 .article-2 p {
   line-height: 1.5em;
   font-family: 'Lato';
@@ -48,9 +53,11 @@
   background: #fff;
   padding: 15px;
 }
+
 .article-3 {
   grid-area: art3;
 }
+
 .article-3 p {
   line-height: 1.5em;
   font-family: 'Lato';
