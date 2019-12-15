@@ -53,3 +53,13 @@ nz-footer {
   min-width: 850px;
   height: 98%;
 }
+
+.active {
+  top: 0;
+  margin-top: 0;
+  border-color: #001529;
+  border-bottom: 0;
+  background-color: #1890ff;
+  color: #fff;
+  border-right: 0;
+}

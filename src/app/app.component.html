@@ -9,13 +9,16 @@
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="horizontal">
-      <li nz-menu-item routerLink="welcome">Inicio</li>
-      <li nz-menu-item routerLink="news">Noticias</li>
-      <li nz-menu-item routerLink="facilities">Instalaciones</li>
-      <li nz-menu-item routerLink="booking">Reservar</li>
-      <li class="right-menu" nz-menu-item routerLink="login"><i nz-icon nzType="login" nzTheme="outline"></i>Login</li>
-      <li class="right-menu" nz-menu-item routerLink="sign-up">Registro</li>
-
+      <li nz-menu-item routerLink="welcome" routerLinkActive="active">Inicio</li>
+      <li nz-menu-item routerLink="news" routerLinkActive="active">Noticias</li>
+      <li nz-menu-item routerLink="facilities" routerLinkActive="active">Instalaciones</li>
+      <li nz-menu-item routerLink="booking" routerLinkActive="active" >Reservar
+      </li>
+      <li class="right-menu" nz-menu-item routerLink="login" routerLinkActive="active">
+        <i nz-icon nzType="login"
+           nzTheme="outline"></i>Login
+      </li>
+      <li class="right-menu" nz-menu-item routerLink="sign-up" routerLinkActive="active">Registro</li>
     </ul>
   </nz-header>
   <nz-content>
@@ -23,5 +26,5 @@
       <router-outlet></router-outlet>
     </div>
   </nz-content>
-<!--  <nz-footer>©2019 Implement By RBN1993</nz-footer>-->
+  <!--  <nz-footer>©2019 Implement By RBN1993</nz-footer>-->
 </nz-layout>
