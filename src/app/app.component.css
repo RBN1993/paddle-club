@@ -46,9 +46,10 @@ nz-footer {
 }
 
 .inner-content {
-  margin: 10px;
+  margin: 5px;
   background: #fff;
   padding: 24px;
   min-height: 600px;
   min-width: 850px;
+  height: 98%;
 }
