@@ -1,0 +1,16 @@
+button {
+  margin-left: 8px;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+}
+
+.sign-up-card {
+  width: 80%;
+}
+
+.alert {
+  margin: 0 20% 10px 22%;
+}

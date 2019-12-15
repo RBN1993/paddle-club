@@ -10,6 +10,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {registerLocaleData} from '@angular/common';
 import es from '@angular/common/locales/es';
+import {AuthRestService} from './core/services/auth.service';
+import {UserRestService} from './core/services/user.service';
+
 
 registerLocaleData(es);
 
@@ -26,7 +29,7 @@ registerLocaleData(es);
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [{provide: NZ_I18N, useValue: es_ES}],
+  providers: [{provide: NZ_I18N, useValue: es_ES}, AuthRestService, UserRestService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

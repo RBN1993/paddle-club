@@ -61,11 +61,6 @@ export class SignUpComponent implements OnInit {
     return {};
   };
 
-
-  onChange(result: Date): void {
-    console.log('onChange: ', result);
-  }
-
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({
       userName: ['', [Validators.required], [this.userNameAsyncValidator]],

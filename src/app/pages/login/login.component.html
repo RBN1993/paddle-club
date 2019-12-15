@@ -1,0 +1,41 @@
+<section>
+
+
+  <nz-card class="sign-up-card" [nzTitle]="titleCard">
+    <nz-alert
+      class="alert"
+      *ngIf="errorMessage"
+      nzType="error"
+      nzMessage="Error de inicio de sesión"
+      nzShowIcon
+      [nzDescription]="errorMessage"
+    >
+    </nz-alert>
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Usuario</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="userErrorTpl">
+          <input nz-input formControlName="userName"/>
+          <ng-template #userErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Por favor introduzca su nombre de usuario!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Contraseña</nz-form-label>
+        <div>
+          <nz-form-control [nzSpan]="12" nzHasFeedback nzErrorTip="Por favor introduzca su contraseña!">
+            <input nz-input type="password" formControlName="password"/>
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzOffset]="11" [nzSpan]="12">
+          <button nz-button nzType="primary" [disabled]="!validateForm.valid">Enviar</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-card>
+</section>
