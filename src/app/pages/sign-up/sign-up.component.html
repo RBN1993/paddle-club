@@ -1,0 +1,69 @@
+<section>
+  <nz-card class="sign-up-card" [nzTitle]="titleCard">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Usuario</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validando..." [nzErrorTip]="userErrorTpl">
+          <input nz-input formControlName="userName"/>
+          <ng-template #userErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Por favor introduzca su nombre de usuario!
+            </ng-container>
+            <ng-container *ngIf="control.hasError('duplicated')">
+              El nombre de usuario ya esta en uso!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="emailErrorTpl">
+          <input nz-input formControlName="email" type="email"/>
+          <ng-template #emailErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('email')">
+              No es un email válido!
+            </ng-container>
+            <ng-container *ngIf="control.hasError('required')">
+              Por favor introduzca su email!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Contraseña</nz-form-label>
+        <div>
+          <nz-form-control [nzSpan]="12" nzHasFeedback nzErrorTip="Por favor introduzca su contraseña!">
+            <input nz-input type="password" formControlName="password" (ngModelChange)="validateConfirmPassword()"/>
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Confirme su contraseña</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="passwordErrorTpl">
+          <input nz-input type="password" formControlName="confirm"/>
+          <ng-template #passwordErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Por favor confirme su contraseña!
+            </ng-container>
+            <ng-container *ngIf="control.hasError('confirm')">
+              La contraseña no coincide!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Fecha de nacimiento</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-date-picker formControlName="birthdate"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+          <button nz-button nzType="primary" [disabled]="!validateForm.valid">Enviar</button>
+          <button nz-button (click)="resetForm($event)">Borrar formulario</button>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </nz-card>
+</section>
