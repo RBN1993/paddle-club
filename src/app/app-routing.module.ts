@@ -9,7 +9,7 @@ const routes: Routes = [
   {path: 'booking', loadChildren: () => import('./pages/booking/booking.module').then(m => m.BookingModule)},
   {path: 'sign-up', loadChildren: () => import('./pages/sign-up/sign-up.module').then(m => m.SignUpModule)},
   {path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)},
-  {path: '**', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule)},
+  {path: '**', redirectTo: '/welcome'},
 ];
 
 @NgModule({
