@@ -12,13 +12,18 @@
       <li nz-menu-item routerLink="welcome" routerLinkActive="active">Inicio</li>
       <li nz-menu-item routerLink="news" routerLinkActive="active">Noticias</li>
       <li nz-menu-item routerLink="facilities" routerLinkActive="active">Instalaciones</li>
-      <li nz-menu-item routerLink="booking" routerLinkActive="active" >Reservar
+      <li *ngIf="isLogged" nz-menu-item routerLink="booking" routerLinkActive="active">Reservar
       </li>
-      <li class="right-menu" nz-menu-item routerLink="login" routerLinkActive="active">
+      <li *ngIf="!isLogged" class="right-menu" nz-menu-item
+          routerLink="login" routerLinkActive="active">
         <i nz-icon nzType="login"
            nzTheme="outline"></i>Login
       </li>
-      <li class="right-menu" nz-menu-item routerLink="sign-up" routerLinkActive="active">Registro</li>
+      <li *ngIf="isLogged" class="right-menu" nz-menu-item routerLink="login" routerLinkActive="active" (click)="closeSession()" >
+        <i nz-icon nzType="logout"
+           nzTheme="outline"></i>Logout
+      </li>
+      <li *ngIf="!isLogged" class="right-menu" nz-menu-item routerLink="sign-up" routerLinkActive="active">Registro</li>
     </ul>
   </nz-header>
   <nz-content>

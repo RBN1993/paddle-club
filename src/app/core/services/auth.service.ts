@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthModel} from '../models/auth.model';
 
@@ -8,6 +8,7 @@ import {AuthModel} from '../models/auth.model';
 
 export class AuthRestService {
   private baseUrl = 'http://fenw.etsisi.upm.es:10000';
+  @Output() loginEmitter = new EventEmitter();
 
   constructor(private http: HttpClient) {
   }
@@ -41,8 +42,12 @@ export class AuthRestService {
 
   logout() {
     localStorage.removeItem('access_token');
-
+    this.loginEmitter.emit(false);
   }
 
+  isLogged() {
+    const token = localStorage.getItem('access_token');
+    return token ? true : false;
+  }
 
 }
