@@ -12,6 +12,7 @@ import {registerLocaleData} from '@angular/common';
 import es from '@angular/common/locales/es';
 import {AuthRestService} from './core/services/auth.service';
 import {UserRestService} from './core/services/user.service';
+import {RouterModule} from '@angular/router';
 
 
 registerLocaleData(es);
@@ -27,7 +28,8 @@ registerLocaleData(es);
     NgZorroAntdModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    RouterModule
   ],
   providers: [{provide: NZ_I18N, useValue: es_ES}, AuthRestService, UserRestService],
   bootstrap: [AppComponent]

@@ -1,16 +1,17 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthModel} from '../models/auth.model';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class AuthRestService {
+export class AuthRestService implements CanActivate {
   private baseUrl = 'http://fenw.etsisi.upm.es:10000';
   @Output() loginEmitter = new EventEmitter();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   login(loginForm: AuthModel) {
@@ -18,6 +19,15 @@ export class AuthRestService {
 
     return this.http.get(this.baseUrl + '/users/login?' + `username=${userName}&password=${password}`,
       {observe: 'response'});
+  }
+
+  redirectAfterLogin(route) {
+    const goTo = route.queryParams.returnUrl;
+    if (goTo) {
+      this.router.navigate([goTo]);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   makeLoginTextError(error) {
@@ -48,6 +58,30 @@ export class AuthRestService {
   isLogged() {
     const token = localStorage.getItem('access_token');
     return token ? true : false;
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    switch (state.url) {
+      case '/booking': {
+        if (this.isLogged()) {
+          return true;
+        } else {
+          this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
+          return false;
+        }
+      }
+      case '/login':
+      case '/sign-up': {
+        if (this.isLogged()) {
+          this.router.navigate(['/welcome']);
+          return false;
+        } else {
+          return true;
+        }
+      }
+      default:
+        return true;
+    }
   }
 
 }

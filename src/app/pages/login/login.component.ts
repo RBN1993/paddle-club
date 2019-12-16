@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthRestService} from '../../core/services/auth.service';
 import {AuthModel} from '../../core/models/auth.model';
-import {Router} from '@angular/router';
+import {ActivatedRouteSnapshot, ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  private route: ActivatedRouteSnapshot;
 
   validateForm: FormGroup;
   titleCard = 'Inicio de sesión';
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit {
         this.authRestService.storeAccessToken(res.headers.get('Authorization'));
         this.errorMessage = null;
         this.authRestService.loginEmitter.emit(true);
-        this.router.navigate(['/']);
+        this.authRestService.redirectAfterLogin(this.route);
       },
       (error) => {
         this.errorMessage = this.authRestService.makeLoginTextError(error);
@@ -40,8 +41,9 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  constructor(private fb: FormBuilder, private authRestService: AuthRestService, private router: Router,
-  ) {
+  constructor(private fb: FormBuilder, private authRestService: AuthRestService, activatedRoute: ActivatedRoute) {
+    this.route = activatedRoute.snapshot;
+
     this.validateForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],

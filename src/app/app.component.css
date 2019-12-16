@@ -38,7 +38,7 @@
 }
 
 nz-content {
-  padding: 0 50px;
+  padding: 0 5px;
 }
 
 nz-footer {
@@ -52,6 +52,7 @@ nz-footer {
   min-height: 600px;
   min-width: 850px;
   height: 98%;
+  width: 100%;
 }
 
 .active {
