@@ -12,6 +12,9 @@
             <ng-container *ngIf="control.hasError('duplicated')">
               El nombre de usuario ya esta en uso!
             </ng-container>
+            <ng-container *ngIf="control.hasError('serverError')">
+              Estamos experimentando problemas, disculpe las molestias.
+            </ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>

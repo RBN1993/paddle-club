@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
+import {UserRestService} from '../../core/services/user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,7 +12,7 @@ export class SignUpComponent implements OnInit {
 
   validateForm: FormGroup;
   titleCard = 'Registro de usuario';
-  date = null;
+  timerId;
 
   ngOnInit(): void {
   }
@@ -41,13 +42,19 @@ export class SignUpComponent implements OnInit {
 
   userNameAsyncValidator = (control: FormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        if (control.value === 'JasonWood') {
-          // you have to return `{error: true}` to mark it as an error event
-          observer.next({error: true, duplicated: true});
-        } else {
-          observer.next(null);
+      let response;
+      if (this.timerId) {
+        clearTimeout(this.timerId);
+      }
+
+      this.timerId = setTimeout(async () => {
+        try {
+          response = await this.userRestService.checkUserName(control.value).toPromise();
+        } catch (e) {
+          response = e;
         }
+        const objectToFormValidation = this.userRestService.handleResponse(response);
+        observer.next(objectToFormValidation);
         observer.complete();
       }, 1000);
     });
@@ -61,7 +68,7 @@ export class SignUpComponent implements OnInit {
     return {};
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userRestService: UserRestService) {
     this.validateForm = this.fb.group({
       userName: ['', [Validators.required], [this.userNameAsyncValidator]],
       email: ['', [Validators.email, Validators.required]],
