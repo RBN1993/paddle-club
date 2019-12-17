@@ -1,10 +1,10 @@
 <section>
-  <nz-card class="sign-up-card" [nzTitle]="titleCard">
-    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+  <nz-card [nzTitle]="titleCard">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value,successTemplate,errorTemplate)">
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Usuario</nz-form-label>
         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validando..." [nzErrorTip]="userErrorTpl">
-          <input nz-input formControlName="userName"/>
+          <input nz-input formControlName="username"/>
           <ng-template #userErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">
               Por favor introduzca su nombre de usuario!
@@ -61,12 +61,38 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+        <nz-form-control [nzOffset]="11" [nzSpan]="12">
           <button nz-button nzType="primary" [disabled]="!validateForm.valid">Enviar</button>
           <button nz-button (click)="resetForm($event)">Borrar formulario</button>
         </nz-form-control>
       </nz-form-item>
-
     </form>
   </nz-card>
+  <ng-template #successTemplate>
+    <div class="ant-notification-notice-content">
+      <div class="ant-notification-notice-with-icon">
+          <span class="ant-notification-notice-icon">
+            <i nz-icon nzType="smile" class="smile-face"></i>
+          </span>
+        <div class="ant-notification-notice-message">Usuario creado correctamente.</div>
+        <div class="ant-notification-notice-description">
+          Bienvenido al mejor club de pádel!
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #errorTemplate>
+    <div class="ant-notification-notice-content">
+
+      <div class="ant-notification-notice-with-icon">
+          <span class="ant-notification-notice-icon">
+            <i nz-icon nzType="frown" nzTheme="outline" class="frown-face"></i>
+          </span>
+        <div class="ant-notification-notice-message">Ha ocurrido un error.</div>
+        <div class="ant-notification-notice-description">
+          Lo sentimos, vuelve a intentarlo!
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </section>

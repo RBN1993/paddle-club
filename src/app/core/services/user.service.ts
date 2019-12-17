@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../models/user.model';
+import {AuthRestService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import {User} from '../models/user.model';
 export class UserRestService {
   private baseUrl = 'http://fenw.etsisi.upm.es:10000';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthRestService) {
   }
 
   checkUserName(userName: string) {
@@ -17,7 +18,7 @@ export class UserRestService {
       {observe: 'response'});
   }
 
-  handleResponse(response) {
+  handleCheckUserResponse(response) {
     switch (response.status) {
       case 200: {
         return {error: true, duplicated: true};
@@ -28,6 +29,11 @@ export class UserRestService {
       default:
         return null;
     }
+  }
+
+  postNewUser(newUser: User) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post(this.baseUrl + '/users', newUser, {headers});
   }
 
 

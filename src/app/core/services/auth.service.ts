@@ -3,9 +3,12 @@ import {HttpClient} from '@angular/common/http';
 import {AuthModel} from '../models/auth.model';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 
+const ACCESS_TOKEN_KEY = 'access_token';
+
 @Injectable({
   providedIn: 'root'
 })
+
 
 export class AuthRestService implements CanActivate {
   private baseUrl = 'http://fenw.etsisi.upm.es:10000';
@@ -47,17 +50,21 @@ export class AuthRestService implements CanActivate {
   }
 
   storeAccessToken(accessToken: string) {
-    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   }
 
   logout() {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
     this.loginEmitter.emit(false);
   }
 
   isLogged() {
-    const token = localStorage.getItem('access_token');
-    return token ? true : false;
+    const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+    return !!token;
+  }
+
+  provideToken() {
+    return localStorage.getItem(ACCESS_TOKEN_KEY);
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

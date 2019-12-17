@@ -2,6 +2,10 @@ button {
   margin-left: 8px;
 }
 
-.sign-up-card{
-  text-align: center;
+.frown-face {
+  color: red;
+}
+
+.smile-face {
+  color: #52c41a
 }

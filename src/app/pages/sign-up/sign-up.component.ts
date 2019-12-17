@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
 import {UserRestService} from '../../core/services/user.service';
+import {User} from '../../core/models/user.model';
+import {NzNotificationService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-sign-up',
@@ -14,16 +16,37 @@ export class SignUpComponent implements OnInit {
   titleCard = 'Registro de usuario';
   timerId;
 
+  constructor(private fb: FormBuilder, private userRestService: UserRestService, private notification: NzNotificationService) {
+    this.validateForm = this.fb.group({
+      username: ['', [Validators.required], [this.userNameAsyncValidator]],
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', [Validators.required]],
+      confirm: ['', [this.confirmValidator]],
+      birthdate: ['', []]
+    });
+  }
+
   ngOnInit(): void {
   }
 
-  submitForm(value: any): void {
+  submitForm(value: User, successTemplate: TemplateRef<{}>, errorTemplate: TemplateRef<{}>): void {
     // tslint:disable-next-line:forin
     for (const key in this.validateForm.controls) {
       this.validateForm.controls[key].markAsDirty();
-      this.validateForm.controls[key].updateValueAndValidity();
     }
-    console.log(value);
+    const {username, email, password, birthdate} = value;
+
+    this.userRestService.postNewUser({
+      username,
+      email,
+      password,
+      birthdate: new Date(birthdate).getTime()
+    }).subscribe(() => {
+      this.notification.template(successTemplate);
+    }, () => {
+      this.notification.template(errorTemplate);
+      this.validateForm.controls.username.updateValueAndValidity();
+    });
   }
 
   resetForm(e: MouseEvent): void {
@@ -53,7 +76,7 @@ export class SignUpComponent implements OnInit {
         } catch (e) {
           response = e;
         }
-        const objectToFormValidation = this.userRestService.handleResponse(response);
+        const objectToFormValidation = this.userRestService.handleCheckUserResponse(response);
         observer.next(objectToFormValidation);
         observer.complete();
       }, 1000);
@@ -68,13 +91,4 @@ export class SignUpComponent implements OnInit {
     return {};
   };
 
-  constructor(private fb: FormBuilder, private userRestService: UserRestService) {
-    this.validateForm = this.fb.group({
-      userName: ['', [Validators.required], [this.userNameAsyncValidator]],
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.required]],
-      confirm: ['', [this.confirmValidator]],
-      birthdate: ['', []]
-    });
-  }
 }
