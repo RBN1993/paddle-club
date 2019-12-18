@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../models/user.model';
-import {AuthRestService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,7 @@ import {AuthRestService} from './auth.service';
 export class UserRestService {
   private baseUrl = 'http://fenw.etsisi.upm.es:10000';
 
-  constructor(private http: HttpClient, private authService: AuthRestService) {
+  constructor(private http: HttpClient) {
   }
 
   checkUserName(userName: string) {

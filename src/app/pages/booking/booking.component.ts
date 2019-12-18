@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {BookingRestService} from '../../core/services/booking.service';
+import {BookingModel} from '../../core/models/booking.model';
+import * as R from 'ramda';
 
 @Component({
   selector: 'app-booking',
@@ -6,39 +9,112 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./booking.component.css']
 })
 export class BookingComponent implements OnInit {
-  selectedValue = new Date();
- listDataMap = {
-    eight: [
-      { type: 'warning', content: 'This is warning event.' },
-      { type: 'success', content: 'This is usual event.' }
-    ],
-    ten: [
-      { type: 'warning', content: 'This is warning event.' },
-      { type: 'success', content: 'This is usual event.' },
-      { type: 'error', content: 'This is error event.' }
-    ],
-    eleven: [
-      { type: 'warning', content: 'This is warning event' },
-      { type: 'success', content: 'This is very long usual event........' },
-      { type: 'error', content: 'This is error event 1.' },
-      { type: 'error', content: 'This is error event 2.' },
-      { type: 'error', content: 'This is error event 3.' },
-      { type: 'error', content: 'This is error event 4.' }
+  current = 0;
+  index = 'one';
+  selectedDateInCalendar = new Date();
+  selectedCourt: number = null;
+  bookingsByUser: [BookingModel];
+  bookedHoursList: [BookingModel];
+  normalizedHours: [];
+  selectedHour: string;
+  listDataMap = {
+    1: [
+      {type: 'warning', content: 'This is warning event.'},
+      {type: 'success', content: 'This is usual event.'}
     ]
   };
-  constructor() {
+
+  constructor(private bookingRestService: BookingRestService) {
   }
 
   ngOnInit() {
+    this.bookingRestService.getBookingsByUser().subscribe((res: [BookingModel]) => {
+      console.log(res);
+      this.bookingsByUser = res;
+    }, error => {
+      console.log(error);
+      this.bookingsByUser = null;
+    });
   }
 
-  getMonthData(date: Date): number | null {
-    if (date.getMonth() === 8) {
-      return 1394;
-    }
-    return null;
+  pre(): void {
+    this.current -= 1;
+    this.changeContent();
   }
+
+  next(): void {
+    this.current += 1;
+    this.changeContent();
+    this.bookingRestService.getBookingList(new Date(this.selectedDateInCalendar).getTime()).subscribe((res: [BookingModel]) => {
+      console.log(res);
+      this.bookedHoursList = res;
+      if (this.selectedCourt) {
+        this.selectCourt(this.selectedCourt);
+      }
+    }, error => {
+      console.log(error);
+      this.bookedHoursList = null;
+    });
+
+  }
+
+  done(): void {
+    console.log('done');
+  }
+
+  changeContent(): void {
+    switch (this.current) {
+      case 0: {
+        this.index = 'one';
+        break;
+      }
+      case 1: {
+        this.index = 'two';
+        break;
+      }
+      case 2: {
+        this.index = 'three';
+        break;
+      }
+      default: {
+        this.index = 'error';
+      }
+    }
+  }
+
   selectChange(select: Date): void {
     console.log(`Select value: ${select}`);
+    this.selectedDateInCalendar = select;
   }
+
+  selectCourt(courtId: number) {
+    this.selectedCourt = courtId;
+    this.normalizedHours = this.getHoursList(this.bookedHoursList, courtId);
+
+  }
+
+  selectHour(hour: string) {
+    this.selectedHour = hour;
+
+  }
+
+  freeHoursList() {
+    // tslint:disable-next-line:prefer-const
+    let acc = [];
+    for (let i = 10; i <= 21; i++) {
+      acc.push(`${i}:00`);
+    }
+    // @ts-ignore
+    return acc;
+  }
+
+  private getHoursList(res: [BookingModel], courtId: number) {
+    const isSameCourt = b => b.courtId === courtId;
+    const filteredListById = R.filter(isSameCourt, res);
+    const freeHours = this.freeHoursList();
+    const isNotInclude = f => !filteredListById.find(x => x.rsvtime === f);
+    return R.filter(isNotInclude, freeHours);
+  }
+
+
 }

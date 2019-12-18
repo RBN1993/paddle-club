@@ -1,10 +1,53 @@
-<section class="custom-calendar">
-  <nz-alert nzMessage="Ha seleccionado el día: {{ selectedValue | date: 'yyyy-MM-dd' }}"></nz-alert>
-  <nz-calendar [(ngModel)]="selectedValue" (nzSelectChange)="selectChange($event)" >
-    <ul *nzDateCell="let date" class="events">
-      <ng-container [ngSwitch]="date.getDate()">
+<section>
+  <nz-alert class="alert-date"
+            nzMessage="Ha seleccionado el día: {{ selectedDateInCalendar | date: 'dd/MM/yyyy' }}
+            {{selectedCourt ?  ' en la pista ' + selectedCourt: null}}
+            {{selectedHour ?  ' a las ' + selectedHour: null}}">
+  </nz-alert>
+  <nz-steps [nzCurrent]="current">
+    <nz-step nzTitle="Seleccione un día"></nz-step>
+    <nz-step nzTitle="Seleccione la pista y la hora"></nz-step>
+    <nz-step nzTitle="Reserva finalizada!"></nz-step>
+  </nz-steps>
 
-      </ng-container>
-    </ul>
-  </nz-calendar>
+  <div class="steps-content">
+
+    <nz-calendar *ngIf="current === 0" [(ngModel)]="selectedDateInCalendar" (nzSelectChange)="selectChange($event)">
+      <ul *nzDateCell="let date" class="events">
+        <ng-container *ngIf="listDataMap[date.getDate()]">
+          <!--        <span>{{listDataMap[date.getDate()][0].type}}</span>-->
+        </ng-container>
+      </ul>
+    </nz-calendar>
+
+    <nz-card nzTitle="Selecciona la pista y escoge la hora después" *ngIf="current === 1">
+      <div class="grid-court">
+        <div nz-card-grid *ngFor="let courtId of [1,2,3,4]"
+             [class]="selectedCourt === courtId? ' mark-as-selected ant-card-grid ant-card-hoverable ng-star-inserted':'grids ant-card-grid ant-card-hoverable ng-star-inserted'"
+             (click)="selectCourt(courtId)">
+          Pista {{courtId}}
+        </div>
+      </div>
+
+    </nz-card>
+    <nz-card class="select-hour" nzTitle="Selecciona entre las horas libres" *ngIf="current === 1">
+      <div class="grid-hour">
+        <div *ngFor="let hour of normalizedHours" nz-card-grid
+             [class]="selectedHour === hour? ' mark-as-selected ant-card-grid ant-card-hoverable ng-star-inserted':'grids ant-card-grid ant-card-hoverable ng-star-inserted'"
+             (click)="selectHour(hour)">{{hour}}</div>
+      </div>
+    </nz-card>
+  </div>
+
+  <div class="steps-action">
+    <button nz-button nzType="primary" (click)="next()" *ngIf="current === 0">
+      <span>Siguiente</span>
+    </button>
+    <button nz-button nzType="primary" (click)="pre()" *ngIf="current > 0">
+      <span>Volver</span>
+    </button>
+    <button nz-button nzType="primary" (click)="done()" *ngIf="current >0">
+      <span>Done</span>
+    </button>
+  </div>
 </section>
