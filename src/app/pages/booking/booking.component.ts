@@ -10,13 +10,15 @@ import * as R from 'ramda';
 })
 export class BookingComponent implements OnInit {
   current = 0;
-  index = 'one';
+  statusSteps = 'process';
   selectedDateInCalendar = new Date();
   selectedCourt: number = null;
   bookingsByUser: [BookingModel];
   bookedHoursList: [BookingModel];
   normalizedHours: [];
   selectedHour: string;
+  lastStep = 'Reserva finalizada!';
+  responseStatus = null;
   listDataMap = {
     1: [
       {type: 'warning', content: 'This is warning event.'},
@@ -32,19 +34,18 @@ export class BookingComponent implements OnInit {
       console.log(res);
       this.bookingsByUser = res;
     }, error => {
-      console.log(error);
       this.bookingsByUser = null;
+      console.log(error);
+
     });
   }
 
   pre(): void {
     this.current -= 1;
-    this.changeContent();
   }
 
   next(): void {
     this.current += 1;
-    this.changeContent();
     this.bookingRestService.getBookingList(new Date(this.selectedDateInCalendar).getTime()).subscribe((res: [BookingModel]) => {
       console.log(res);
       this.bookedHoursList = res;
@@ -60,31 +61,26 @@ export class BookingComponent implements OnInit {
 
   done(): void {
     this.current += 1;
-    this.bookingRestService.postNewBooking({courtid: this.selectedCourt, rsvdatetime: 1577876400000}).subscribe(res => {
-      console.log(res);
-    }, error => {
-      console.log(error);
-    });
+    console.log('time', new Date(this.selectedDateInCalendar.toDateString() + ' ' + this.selectedHour));
+    this.bookingRestService.postNewBooking({
+      courtid: this.selectedCourt,
+      rsvdatetime: new Date(this.selectedDateInCalendar.toDateString() + ' ' + this.selectedHour).getTime()
+    })
+      .subscribe(res => {
+        console.log(res);
+        this.lastStep = 'Reserva finalizada!';
+      }, error => {
+        this.lastStep = 'Error en la reserva';
+        this.statusSteps = 'error';
+        this.responseStatus = this.bookingRestService.makeBookingTextError(error);
+      });
   }
 
-  changeContent(): void {
-    switch (this.current) {
-      case 0: {
-        this.index = 'one';
-        break;
-      }
-      case 1: {
-        this.index = 'two';
-        break;
-      }
-      case 2: {
-        this.index = 'three';
-        break;
-      }
-      default: {
-        this.index = 'error';
-      }
-    }
+  goHome(): void {
+    this.lastStep = 'Reserva finalizada!';
+    this.statusSteps = 'process';
+    this.current = 0;
+    this.selectedHour = null;
   }
 
   selectChange(select: Date): void {
@@ -95,7 +91,7 @@ export class BookingComponent implements OnInit {
   selectCourt(courtId: number) {
     this.selectedCourt = courtId;
     this.normalizedHours = this.getHoursList(this.bookedHoursList, courtId);
-
+    this.selectedHour = null;
   }
 
   selectHour(hour: string) {

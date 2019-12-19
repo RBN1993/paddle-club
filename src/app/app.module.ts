@@ -13,6 +13,7 @@ import es from '@angular/common/locales/es';
 import {AuthRestService} from './core/services/auth.service';
 import {UserRestService} from './core/services/user.service';
 import {RouterModule} from '@angular/router';
+import {BookingRestService} from './core/services/booking.service';
 
 
 registerLocaleData(es);
@@ -31,7 +32,7 @@ registerLocaleData(es);
     BrowserAnimationsModule,
     RouterModule
   ],
-  providers: [{provide: NZ_I18N, useValue: es_ES}, AuthRestService, UserRestService],
+  providers: [{provide: NZ_I18N, useValue: es_ES}, AuthRestService, UserRestService, BookingRestService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

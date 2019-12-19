@@ -4,10 +4,10 @@
             {{selectedCourt ?  ' en la pista ' + selectedCourt: null}}
             {{selectedHour ?  ' a las ' + selectedHour: null}}">
   </nz-alert>
-  <nz-steps [nzCurrent]="current">
+  <nz-steps [nzCurrent]="current" [nzStatus]="statusSteps" nzSize="small">
     <nz-step nzTitle="Seleccione un día"></nz-step>
-    <nz-step nzTitle="Seleccione la pista y la hora"></nz-step>
-    <nz-step nzTitle="Reserva finalizada!"></nz-step>
+    <nz-step nzTitle="Seleccione la pista y la hora "></nz-step>
+    <nz-step [nzTitle]="lastStep"></nz-step>
   </nz-steps>
 
   <div class="steps-content">
@@ -37,16 +37,30 @@
              (click)="selectHour(hour)">{{hour}}</div>
       </div>
     </nz-card>
+
+    <nz-result *ngIf="current === 2 && statusSteps !== 'error'" [nzIcon]="'smile-twotone'"
+               [nzTitle]="'Genial, hemos reservado tu pista!'">
+      <div nz-result-extra>
+        <button nz-button nzType="primary" (click)="goHome()">Volver al inicio</button>
+      </div>
+    </nz-result>
+
+    <nz-result *ngIf="current === 2 && statusSteps === 'error'" [nzStatus]="responseStatus.status"
+               [nzTitle]="responseStatus.description">
+      <div nz-result-extra>
+        <button nz-button nzType="primary" (click)="goHome()">Volver al inicio</button>
+      </div>
+    </nz-result>
   </div>
 
   <div class="steps-action">
     <button nz-button nzType="primary" (click)="next()" *ngIf="current === 0">
       <span>Siguiente</span>
     </button>
-    <button nz-button nzType="primary" (click)="pre()" *ngIf="current > 0">
+    <button nz-button nzType="primary" (click)="pre()" *ngIf="current > 0 &&  current <2">
       <span>Volver</span>
     </button>
-    <button nz-button nzType="primary" (click)="done()" *ngIf="current >0 && current<2">
+    <button nz-button nzType="primary" (click)="done()" *ngIf="current >0 && current<2" [disabled]="!selectedHour">
       <span>Reservar</span>
     </button>
   </div>

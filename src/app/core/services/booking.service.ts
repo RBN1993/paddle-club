@@ -36,5 +36,26 @@ export class BookingRestService {
     return this.http.post(this.baseUrl + '/reservations', newBooking, {headers, observe: 'response'});
   }
 
+  /*
+   * This methos returns other status number because of ant-design result component needs
+   */
+  makeBookingTextError(error) {
+    switch (error.status) {
+      case 400:
+        return {description: 'Pista u hora seleccionados no válidos', status: '404'};
+
+      case 401:
+        return {description: 'Intente volver a iniciar sesión', status: '403'};
+
+      case 409:
+        return {description: 'Ya ha alcanzado el máximo número de reservas', status: '403'};
+
+      case 500:
+        return {description: 'El servidor no se encuentra disponible', status: '500'};
+
+      default:
+        return {description: 'Ha ocurrido un error', status: '500'};
+    }
+  }
 
 }
