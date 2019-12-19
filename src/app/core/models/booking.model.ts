@@ -1,7 +1,7 @@
 export class BookingModel {
-  rsvId: number;
-  courtId: number;
-  rsvdateTime: number;
-  rsvday: string;
-  rsvtime: string;
+  rsvId?: number;
+  courtid: number;
+  rsvdatetime: number;
+  rsvday?: string;
+  rsvtime?: string;
 }

@@ -59,7 +59,12 @@ export class BookingComponent implements OnInit {
   }
 
   done(): void {
-    console.log('done');
+    this.current += 1;
+    this.bookingRestService.postNewBooking({courtid: this.selectedCourt, rsvdatetime: 1577876400000}).subscribe(res => {
+      console.log(res);
+    }, error => {
+      console.log(error);
+    });
   }
 
   changeContent(): void {
@@ -83,8 +88,8 @@ export class BookingComponent implements OnInit {
   }
 
   selectChange(select: Date): void {
-    console.log(`Select value: ${select}`);
     this.selectedDateInCalendar = select;
+    this.selectedHour = null;
   }
 
   selectCourt(courtId: number) {

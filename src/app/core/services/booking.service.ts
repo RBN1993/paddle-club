@@ -33,7 +33,7 @@ export class BookingRestService {
   postNewBooking(newBooking: BookingModel) {
     const headers = this.getHeaders();
 
-    return this.http.post(this.baseUrl + '/reservations', newBooking, {headers});
+    return this.http.post(this.baseUrl + '/reservations', newBooking, {headers, observe: 'response'});
   }
 
 
