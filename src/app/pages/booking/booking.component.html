@@ -14,9 +14,7 @@
 
     <nz-calendar *ngIf="current === 0" [(ngModel)]="selectedDateInCalendar" (nzSelectChange)="selectChange($event)">
       <ul *nzDateCell="let date" class="events">
-        <ng-container *ngIf="listDataMap[date.getDate()]">
-          <!--        <span>{{listDataMap[date.getDate()][0].type}}</span>-->
-        </ng-container>
+
       </ul>
     </nz-calendar>
 
@@ -54,7 +52,8 @@
   </div>
 
   <div class="steps-action">
-    <button nz-button nzType="primary" (click)="next()" *ngIf="current === 0">
+    <button nz-button nzType="primary" (click)="next()"
+            *ngIf="current === 0 && selectedDateInCalendar.getTime() >= now.getTime()">
       <span>Siguiente</span>
     </button>
     <button nz-button nzType="primary" (click)="pre()" *ngIf="current > 0 &&  current <2">

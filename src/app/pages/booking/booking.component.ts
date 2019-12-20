@@ -12,6 +12,7 @@ export class BookingComponent implements OnInit {
   current = 0;
   statusSteps = 'process';
   selectedDateInCalendar = new Date();
+  now = new Date();
   selectedCourt: number = null;
   bookingsByUser: [BookingModel];
   bookedHoursList: [BookingModel];

@@ -4,6 +4,7 @@ import {Observable, Observer} from 'rxjs';
 import {UserRestService} from '../../core/services/user.service';
 import {User} from '../../core/models/user.model';
 import {NzNotificationService} from 'ng-zorro-antd';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +17,8 @@ export class SignUpComponent implements OnInit {
   titleCard = 'Registro de usuario';
   timerId;
 
-  constructor(private fb: FormBuilder, private userRestService: UserRestService, private notification: NzNotificationService) {
+  constructor(private fb: FormBuilder, private userRestService: UserRestService,
+              private notification: NzNotificationService, private router: Router) {
     this.validateForm = this.fb.group({
       username: ['', [Validators.required], [this.userNameAsyncValidator]],
       email: ['', [Validators.email, Validators.required]],
@@ -43,6 +45,7 @@ export class SignUpComponent implements OnInit {
       birthdate: new Date(birthdate).getTime()
     }).subscribe(() => {
       this.notification.template(successTemplate);
+      this.router.navigate(['/login']);
     }, () => {
       this.notification.template(errorTemplate);
       this.validateForm.controls.username.updateValueAndValidity();
