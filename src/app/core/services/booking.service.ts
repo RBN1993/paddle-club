@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {AuthRestService} from './auth.service';
 import {BookingModel} from '../models/booking.model';
+import {ActivatedRouteSnapshot, Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,10 @@ import {BookingModel} from '../models/booking.model';
 export class BookingRestService {
   private baseUrl = 'http://fenw.etsisi.upm.es:10000';
 
-  constructor(private http: HttpClient, private authService: AuthRestService) {
+  constructor(private http: HttpClient, private authService: AuthRestService, private router: Router) {
   }
 
-  private getHeaders() {
+  private makeHeaders() {
     const accessToken = this.authService.provideToken();
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
       .set('Authorization', accessToken);
@@ -21,17 +22,18 @@ export class BookingRestService {
   }
 
   getBookingsByUser() {
-    const headers = this.getHeaders();
-    return this.http.get(this.baseUrl + '/reservations', {headers});
+    const headers = this.makeHeaders();
+    return this.http.get(this.baseUrl + '/reservations', {headers, observe: 'response'})
+      ;
   }
 
   getBookingList(time: number) {
-    const headers = this.getHeaders();
-    return this.http.get(this.baseUrl + '/reservations/' + time, {headers});
+    const headers = this.makeHeaders();
+    return this.http.get(this.baseUrl + '/reservations/' + time, {headers, observe: 'response'});
   }
 
   postNewBooking(newBooking: BookingModel) {
-    const headers = this.getHeaders();
+    const headers = this.makeHeaders();
 
     return this.http.post(this.baseUrl + '/reservations', newBooking, {headers, observe: 'response'});
   }
@@ -58,4 +60,23 @@ export class BookingRestService {
     }
   }
 
+  processResponse(res: HttpResponse<any>): [BookingModel] {
+    const goTo = '/booking';
+    console.log({goTo});
+    switch (res.status) {
+      case 200: {
+        this.authService.storeAccessToken(res);
+        return res.body;
+      }
+      // case 401: {
+      //   this.authService.logout();
+      //   return;
+      // }
+      default: {
+        this.authService.logout();
+        this.router.navigate(['/login'], {queryParams: {returnUrl: goTo}});
+        return;
+      }
+    }
+  }
 }

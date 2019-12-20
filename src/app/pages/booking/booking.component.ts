@@ -20,24 +20,29 @@ export class BookingComponent implements OnInit {
   selectedHour: string;
   lastStep = 'Reserva finalizada!';
   responseStatus = null;
-  listDataMap = {
-    1: [
-      {type: 'warning', content: 'This is warning event.'},
-      {type: 'success', content: 'This is usual event.'}
-    ]
-  };
+  availableHours = [];
+  listDataMap = [
+    {
+      rsvId: 925,
+      courtId: 4,
+      rsvdateTime: 1544529600000,
+      rsvday: '11/12/2018',
+      rsvtime: '13:00'
+    }
+  ];
 
   constructor(private bookingRestService: BookingRestService) {
   }
 
   ngOnInit() {
-    this.bookingRestService.getBookingsByUser().subscribe((res: [BookingModel]) => {
+    this.bookingRestService.getBookingsByUser().subscribe((res) => {
       console.log(res);
-      this.bookingsByUser = res;
+      this.bookingsByUser = this.bookingRestService.processResponse(res);
+      this.availableHours = this.makeAvailableHourList();
     }, error => {
+      this.bookingRestService.processResponse(error);
       this.bookingsByUser = null;
       console.log(error);
-
     });
   }
 
@@ -47,14 +52,15 @@ export class BookingComponent implements OnInit {
 
   next(): void {
     this.current += 1;
-    this.bookingRestService.getBookingList(new Date(this.selectedDateInCalendar).getTime()).subscribe((res: [BookingModel]) => {
+    this.bookingRestService.getBookingList(new Date(this.selectedDateInCalendar).getTime()).subscribe((res) => {
       console.log(res);
-      this.bookedHoursList = res;
+      this.bookedHoursList = this.bookingRestService.processResponse(res);
       if (this.selectedCourt) {
         this.selectCourt(this.selectedCourt);
       }
     }, error => {
       console.log(error);
+      this.bookingRestService.processResponse(error);
       this.bookedHoursList = null;
     });
 
@@ -91,7 +97,7 @@ export class BookingComponent implements OnInit {
 
   selectCourt(courtId: number) {
     this.selectedCourt = courtId;
-    this.normalizedHours = this.getHoursList(this.bookedHoursList, courtId);
+    this.normalizedHours = this.getFreeHours(this.bookedHoursList, courtId);
     this.selectedHour = null;
   }
 
@@ -100,7 +106,7 @@ export class BookingComponent implements OnInit {
 
   }
 
-  freeHoursList() {
+  makeAvailableHourList() {
     // tslint:disable-next-line:prefer-const
     let acc = [];
     for (let i = 10; i <= 21; i++) {
@@ -110,12 +116,11 @@ export class BookingComponent implements OnInit {
     return acc;
   }
 
-  private getHoursList(res: [BookingModel], courtId: number) {
+  private getFreeHours(res: [BookingModel], courtId: number) {
     const isSameCourt = b => b.courtId === courtId;
     const filteredListById = R.filter(isSameCourt, res);
-    const freeHours = this.freeHoursList();
     const isNotInclude = f => !filteredListById.find(x => x.rsvtime === f);
-    return R.filter(isNotInclude, freeHours);
+    return R.filter(isNotInclude, this.availableHours);
   }
 
 

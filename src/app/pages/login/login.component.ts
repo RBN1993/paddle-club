@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
     this.authRestService.login(value).subscribe(
       (res) => {
-        this.authRestService.storeAccessToken(res.headers.get('Authorization'));
+        this.authRestService.storeAccessToken(res);
         this.errorMessage = null;
         this.authRestService.loginEmitter.emit(true);
         this.authRestService.redirectAfterLogin(this.route);

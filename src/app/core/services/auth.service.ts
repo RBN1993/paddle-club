@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {AuthModel} from '../models/auth.model';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 
@@ -49,7 +49,8 @@ export class AuthRestService implements CanActivate {
     }
   }
 
-  storeAccessToken(accessToken: string) {
+  storeAccessToken(res: HttpResponse<any>) {
+    const accessToken = res.headers.get('Authorization')
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   }
 

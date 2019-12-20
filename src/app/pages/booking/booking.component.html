@@ -14,7 +14,9 @@
 
     <nz-calendar *ngIf="current === 0" [(ngModel)]="selectedDateInCalendar" (nzSelectChange)="selectChange($event)">
       <ul *nzDateCell="let date" class="events">
-
+        <ng-container *ngIf="listDataMap">
+          <span>{{listDataMap[0].courtId}}</span>
+        </ng-container>
       </ul>
     </nz-calendar>
 
