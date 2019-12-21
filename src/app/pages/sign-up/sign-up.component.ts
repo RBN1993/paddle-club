@@ -29,6 +29,7 @@ export class SignUpComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.notification.config({nzPlacement: 'bottomRight'});
   }
 
   submitForm(value: User, successTemplate: TemplateRef<{}>, errorTemplate: TemplateRef<{}>): void {
@@ -45,8 +46,8 @@ export class SignUpComponent implements OnInit {
       birthdate: new Date(birthdate).getTime()
     }).subscribe(() => {
       this.notification.template(successTemplate);
-      this.router.navigate(['/login']);
-    }, () => {
+      // this.router.navigate(['/login']);
+    }, (error) => {
       this.notification.template(errorTemplate);
       this.validateForm.controls.username.updateValueAndValidity();
     });

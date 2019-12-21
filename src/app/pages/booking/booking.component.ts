@@ -10,9 +10,9 @@ import * as R from 'ramda';
 })
 export class BookingComponent implements OnInit {
   current = 0;
+  now = new Date();
   statusSteps = 'process';
   selectedDateInCalendar = new Date();
-  now = new Date();
   selectedCourt: number = null;
   bookingsByUser: [BookingModel];
   bookedHoursList: [BookingModel];
@@ -119,9 +119,19 @@ export class BookingComponent implements OnInit {
   private getFreeHours(res: [BookingModel], courtId: number) {
     const isSameCourt = b => b.courtId === courtId;
     const filteredListById = R.filter(isSameCourt, res);
-    const isNotInclude = f => !filteredListById.find(x => x.rsvtime === f);
+    const isNotInclude = h => !filteredListById.find(x => x.rsvtime === h);
+    if (this.selectedDateInCalendar.toLocaleDateString() === this.now.toLocaleDateString()) {
+      const isMinor = h => !(parseInt(h, 10) < new Date().getHours());
+      return R.pipe(
+        R.filter(isNotInclude),
+        R.filter(isMinor)
+      )(this.availableHours);
+    }
     return R.filter(isNotInclude, this.availableHours);
   }
 
 
+  canSelectDay(): boolean {
+    return this.selectedDateInCalendar.getTime() >= this.now.getTime();
+  }
 }

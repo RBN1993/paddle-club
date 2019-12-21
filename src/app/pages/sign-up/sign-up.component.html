@@ -4,7 +4,7 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Usuario</nz-form-label>
         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validando..." [nzErrorTip]="userErrorTpl">
-          <input nz-input formControlName="username"/>
+          <input nz-input formControlName="username"  maxlength="8"/>
           <ng-template #userErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">
               Por favor introduzca su nombre de usuario!
