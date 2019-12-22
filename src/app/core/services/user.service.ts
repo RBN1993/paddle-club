@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../models/user.model';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class UserRestService {
-  private baseUrl = 'http://fenw.etsisi.upm.es:10000';
+  private baseUrl = environment.url_api;
 
   constructor(private http: HttpClient) {
   }

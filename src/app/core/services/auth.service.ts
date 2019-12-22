@@ -2,6 +2,7 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {AuthModel} from '../models/auth.model';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 const ACCESS_TOKEN_KEY = 'access_token';
 
@@ -11,7 +12,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 
 
 export class AuthRestService implements CanActivate {
-  private baseUrl = 'http://fenw.etsisi.upm.es:10000';
+  private baseUrl = environment.url_api;
   @Output() loginEmitter = new EventEmitter();
 
   constructor(private http: HttpClient, private router: Router) {
@@ -50,7 +51,7 @@ export class AuthRestService implements CanActivate {
   }
 
   storeAccessToken(res: HttpResponse<any>) {
-    const accessToken = res.headers.get('Authorization')
+    const accessToken = res.headers.get('Authorization');
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   }
 

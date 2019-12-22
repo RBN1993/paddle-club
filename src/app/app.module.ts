@@ -14,7 +14,8 @@ import {AuthRestService} from './core/services/auth.service';
 import {UserRestService} from './core/services/user.service';
 import {RouterModule} from '@angular/router';
 import {BookingRestService} from './core/services/booking.service';
-
+import {AngularFireModule} from '@angular/fire';
+import {environment} from '../environments/environment';
 
 registerLocaleData(es);
 
@@ -30,7 +31,8 @@ registerLocaleData(es);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule
+    RouterModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [{provide: NZ_I18N, useValue: es_ES}, AuthRestService, UserRestService, BookingRestService],
   bootstrap: [AppComponent]

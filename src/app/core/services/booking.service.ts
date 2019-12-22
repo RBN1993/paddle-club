@@ -2,14 +2,15 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {AuthRestService} from './auth.service';
 import {BookingModel} from '../models/booking.model';
-import {ActivatedRouteSnapshot, Router} from '@angular/router';
+import { Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class BookingRestService {
-  private baseUrl = 'http://fenw.etsisi.upm.es:10000';
+  private baseUrl = environment.url_api;
 
   constructor(private http: HttpClient, private authService: AuthRestService, private router: Router) {
   }
