@@ -38,6 +38,11 @@ export class BookingRestService {
     return this.http.post(this.baseUrl + '/reservations', newBooking, {headers, observe: 'response'});
   }
 
+  removeBooking(rsvId: number) {
+    const headers = this.makeHeaders();
+    return this.http.delete(this.baseUrl + '/reservations/' + rsvId, {headers});
+  }
+
   /*
    * This methos returns other status number because of ant-design result component needs
    */
@@ -68,10 +73,6 @@ export class BookingRestService {
         this.authService.storeAccessToken(res);
         return res.body;
       }
-      // case 401: {
-      //   this.authService.logout();
-      //   return;
-      // }
       default: {
         this.authService.logout();
         this.router.navigate(['/login'], {queryParams: {returnUrl: goTo}});

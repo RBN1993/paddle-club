@@ -22,11 +22,16 @@ export class BookingComponent implements OnInit {
   responseStatus = null;
   availableHours = [];
   bookingListByDay = [];
+  isVisible: boolean;
 
   constructor(private bookingRestService: BookingRestService) {
   }
 
   ngOnInit() {
+    this.startState();
+  }
+
+  private startState() {
     this.bookingRestService.getBookingsByUser().subscribe((res) => {
       console.log(res);
       this.bookingsByUser = this.bookingRestService.processResponse(res);
@@ -37,8 +42,6 @@ export class BookingComponent implements OnInit {
       this.bookingsByUser = null;
       console.log(error);
     });
-
-
   }
 
   private makeListToShowByMonth() {
@@ -58,7 +61,7 @@ export class BookingComponent implements OnInit {
         [{content: `Pista ${booking.courtId} a las ${booking.rsvtime}`}],
         acc);
     }, {});
-    console.log(JSON.stringify(this.bookingListByDay, null, 2));
+    // console.log(JSON.stringify(this.bookingListByDay, null, 2));
   }
 
   pre(): void {
@@ -103,6 +106,7 @@ export class BookingComponent implements OnInit {
     this.statusSteps = 'process';
     this.current = 0;
     this.selectedHour = null;
+    this.startState();
   }
 
   selectChange(select: Date): void {
@@ -148,5 +152,23 @@ export class BookingComponent implements OnInit {
 
   canSelectDay(): boolean {
     return this.selectedDateInCalendar.getTime() >= this.now.getTime();
+  }
+
+  handleCancel() {
+    this.showModal();
+  }
+
+  showModal() {
+    this.isVisible = !this.isVisible;
+  }
+
+  removeBooking(rsvId: number) {
+    console.log(rsvId);
+    this.bookingRestService.removeBooking(rsvId).subscribe(value => {
+      this.startState();
+      this.showModal();
+    }, error => {
+      this.startState();
+    });
   }
 }

@@ -1,7 +1,16 @@
+.header-div{
+  display: grid;
+  grid-template-columns: 92% 8%;
+}
 
 .alert-date {
   text-align: center;
-  margin: -1% 10% 0.5% 10%;
+  margin: -1% 4% 0.5% 13%;;
+}
+
+.delete-button-list{
+  margin-top: -10%;
+  width: max-content;
 }
 
 .events {

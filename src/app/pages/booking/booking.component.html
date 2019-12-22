@@ -1,9 +1,42 @@
 <section>
-  <nz-alert class="alert-date"
-            nzMessage="Ha seleccionado el día: {{ selectedDateInCalendar | date: 'dd/MM/yyyy' }}
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Lista de reservas" nzFooter=" " (nzOnCancel)="handleCancel()">
+    <nz-table #basicTable [nzData]="bookingsByUser" [nzFrontPagination]="false">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Pista</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td></td>
+        <td>{{ data.courtId }}</td>
+        <td>{{ data.rsvday }}</td>
+        <td>{{ data.rsvtime }}</td>
+        <td>
+          <button nz-button nzType="primary" (click)="removeBooking(data.rsvId)">
+            <i nz-icon nzType="delete" nzTheme="outline"></i>
+            Eliminar
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-modal>
+  <div class="header-div">
+    <nz-alert class="alert-date"
+              nzMessage="Ha seleccionado el día: {{ selectedDateInCalendar | date: 'dd/MM/yyyy' }}
             {{selectedCourt ?  ' en la pista ' + selectedCourt: null}}
             {{selectedHour ?  ' a las ' + selectedHour: null}}">
-  </nz-alert>
+    </nz-alert>
+    <button *ngIf="current === 0" nz-button nzType="primary" class="delete-button-list" (click)="showModal()">
+      <i nz-icon nzType="delete" nzTheme="outline"></i>
+      Mis reservas
+    </button>
+  </div>
   <nz-steps [nzCurrent]="current" [nzStatus]="statusSteps" nzSize="small">
     <nz-step nzTitle="Seleccione un día"></nz-step>
     <nz-step nzTitle="Seleccione la pista y la hora "></nz-step>
