@@ -21,15 +21,7 @@ export class BookingComponent implements OnInit {
   lastStep = 'Reserva finalizada!';
   responseStatus = null;
   availableHours = [];
-  listDataMap = [
-    {
-      rsvId: 925,
-      courtId: 4,
-      rsvdateTime: 1544529600000,
-      rsvday: '11/12/2018',
-      rsvtime: '13:00'
-    }
-  ];
+  bookingListByDay = [];
 
   constructor(private bookingRestService: BookingRestService) {
   }
@@ -39,11 +31,34 @@ export class BookingComponent implements OnInit {
       console.log(res);
       this.bookingsByUser = this.bookingRestService.processResponse(res);
       this.availableHours = this.makeAvailableHourList();
+      this.makeListToShowByMonth();
     }, error => {
       this.bookingRestService.processResponse(error);
       this.bookingsByUser = null;
       console.log(error);
     });
+
+
+  }
+
+  private makeListToShowByMonth() {
+    // @ts-ignore
+    this.bookingListByDay = this.bookingsByUser.reduce((acc: {}, booking: {
+      rsvdateTime: any;
+      rsvtime: string;
+      courtId: string;
+      rsvday: string;
+    }) => {
+      if (acc[new Date(booking.rsvdateTime).toLocaleDateString()]) {
+        return R.assoc(new Date(booking.rsvdateTime).toLocaleDateString(),
+          [...acc[new Date(booking.rsvdateTime).toLocaleDateString()], {content: `Pista ${booking.courtId} a las ${booking.rsvtime}`}]
+          , acc);
+      }
+      return R.assoc(new Date(booking.rsvdateTime).toLocaleDateString(),
+        [{content: `Pista ${booking.courtId} a las ${booking.rsvtime}`}],
+        acc);
+    }, {});
+    console.log(JSON.stringify(this.bookingListByDay, null, 2));
   }
 
   pre(): void {
@@ -121,7 +136,7 @@ export class BookingComponent implements OnInit {
     const filteredListById = R.filter(isSameCourt, res);
     const isNotInclude = h => !filteredListById.find(x => x.rsvtime === h);
     if (this.selectedDateInCalendar.toLocaleDateString() === this.now.toLocaleDateString()) {
-      const isMinor = h => !(parseInt(h, 10) < new Date().getHours());
+      const isMinor = h => !(parseInt(h, 10) <= new Date().getHours());
       return R.pipe(
         R.filter(isNotInclude),
         R.filter(isMinor)

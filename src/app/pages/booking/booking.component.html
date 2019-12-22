@@ -19,8 +19,10 @@
 
     <nz-calendar *ngIf="current === 0" [(ngModel)]="selectedDateInCalendar" (nzSelectChange)="selectChange($event)">
       <ul *nzDateCell="let date" class="events">
-        <ng-container *ngIf="listDataMap">
-          <span>{{listDataMap[0].courtId}}</span>
+        <ng-container *ngIf="bookingListByDay">
+          <li *ngFor="let item of bookingListByDay[date.toLocaleDateString()]">
+            <nz-badge nzStatus="success" [nzText]="item.content"></nz-badge>
+          </li>
         </ng-container>
       </ul>
     </nz-calendar>
